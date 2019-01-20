@@ -1,0 +1,15 @@
+query GetCurrentWatching($userId: Int!) {
+  MediaListCollection(userId: $userId , status_in: [CURRENT], type: ANIME) {
+    lists {
+      isCustomList
+      entries {
+        info: media {
+          title {
+            userPreferred
+          }
+        }
+        progress
+      }
+    }
+  }
+}

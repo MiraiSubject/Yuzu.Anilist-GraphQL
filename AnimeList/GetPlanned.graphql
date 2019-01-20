@@ -1,0 +1,15 @@
+query GetPlanned($userId: Int!) {
+    MediaListCollection(userId: $userId , status_in: [PLANNED], type: ANIME) {
+        lists {
+            isCustomList
+            entries {
+                info: media {
+                    title {
+                        userPreferred
+                    }
+                }
+                progress
+            }
+        }
+    }
+}

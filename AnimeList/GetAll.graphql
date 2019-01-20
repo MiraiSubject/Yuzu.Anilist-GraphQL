@@ -1,0 +1,16 @@
+query GetAllFromLibrary($userId: Int!) {
+    MediaListCollection(userId: $userId , status_in: [CURRENT,PLANNING,COMPLETED, DROPPED, PAUSED], type: ANIME) {
+        lists {
+            isCustomList
+            entries {
+                info: media {
+                    title {
+                        userPreferred
+                    }
+                }
+                progress
+            }
+        }
+    }
+}
+

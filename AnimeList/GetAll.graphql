@@ -4,7 +4,7 @@ query GetAllFromLibrary($userId: Int!) {
             entries {
                 media {
                     title {
-                        userPreferred
+                        romaji
                     }
                 }
                 progress

@@ -1,0 +1,12 @@
+mutation mutateListEntry($animeId: Int, $progress: Int, $status: MediaListStatus) {
+    SaveMediaListEntry(mediaId: $animeId, progress: $progress, status: $status) {
+        id
+        progress
+        status
+        media {
+            title {
+                romaji
+            }
+        }
+    }
+}

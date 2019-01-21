@@ -1,0 +1,10 @@
+query getOwnAnilistUserId { # Only works if user is Authenticated using OAuth2
+    {
+        Viewer {
+            id
+        }
+    }
+}
+
+
+

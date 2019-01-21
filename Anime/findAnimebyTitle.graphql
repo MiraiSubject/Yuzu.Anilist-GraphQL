@@ -1,0 +1,13 @@
+query GetAnimeByName($animeTitle: String!) {
+    Media(search: $animeTitle) {
+        id
+        title {
+            romaji
+        }
+        episodes
+        mediaListEntry {
+            progress
+            status
+        }
+    }
+}

@@ -5,6 +5,7 @@ query GetCurrentWatching($userId: Int!) {
         media {
           title {
             userPreferred
+            english
           }
         }
         progress

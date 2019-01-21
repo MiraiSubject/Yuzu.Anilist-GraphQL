@@ -557,7 +557,7 @@ public final class GetPlannedQuery: GraphQLQuery {
 
 public final class GetCurrentWatchingQuery: GraphQLQuery {
   public let operationDefinition =
-    "query GetCurrentWatching($userId: Int!) {\n  MediaListCollection(userId: $userId, status_in: [CURRENT], type: ANIME) {\n    __typename\n    lists {\n      __typename\n      entries {\n        __typename\n        media {\n          __typename\n          title {\n            __typename\n            userPreferred\n          }\n        }\n        progress\n        status\n      }\n    }\n  }\n}"
+    "query GetCurrentWatching($userId: Int!) {\n  MediaListCollection(userId: $userId, status_in: [CURRENT], type: ANIME) {\n    __typename\n    lists {\n      __typename\n      entries {\n        __typename\n        media {\n          __typename\n          title {\n            __typename\n            userPreferred\n            english\n          }\n        }\n        progress\n        status\n      }\n    }\n  }\n}"
 
   public var userId: Int
 
@@ -771,6 +771,7 @@ public final class GetCurrentWatchingQuery: GraphQLQuery {
               public static let selections: [GraphQLSelection] = [
                 GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("userPreferred", type: .scalar(String.self)),
+                GraphQLField("english", type: .scalar(String.self)),
               ]
 
               public private(set) var resultMap: ResultMap
@@ -779,8 +780,8 @@ public final class GetCurrentWatchingQuery: GraphQLQuery {
                 self.resultMap = unsafeResultMap
               }
 
-              public init(userPreferred: String? = nil) {
-                self.init(unsafeResultMap: ["__typename": "MediaTitle", "userPreferred": userPreferred])
+              public init(userPreferred: String? = nil, english: String? = nil) {
+                self.init(unsafeResultMap: ["__typename": "MediaTitle", "userPreferred": userPreferred, "english": english])
               }
 
               public var __typename: String {
@@ -799,6 +800,16 @@ public final class GetCurrentWatchingQuery: GraphQLQuery {
                 }
                 set {
                   resultMap.updateValue(newValue, forKey: "userPreferred")
+                }
+              }
+
+              /// The official english title
+              public var english: String? {
+                get {
+                  return resultMap["english"] as? String
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "english")
                 }
               }
             }

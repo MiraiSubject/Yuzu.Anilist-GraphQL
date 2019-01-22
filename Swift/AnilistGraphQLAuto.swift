@@ -1021,6 +1021,80 @@ public final class GetAnimeByNameQuery: GraphQLQuery {
   }
 }
 
+public final class GetOwnAnilistUserIdQuery: GraphQLQuery {
+  public let operationDefinition =
+    "query getOwnAnilistUserId {\n  Viewer {\n    __typename\n    id\n  }\n}"
+
+  public init() {
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Query"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("Viewer", type: .object(Viewer.selections)),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(viewer: Viewer? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Query", "Viewer": viewer.flatMap { (value: Viewer) -> ResultMap in value.resultMap }])
+    }
+
+    /// Get the currently authenticated user
+    public var viewer: Viewer? {
+      get {
+        return (resultMap["Viewer"] as? ResultMap).flatMap { Viewer(unsafeResultMap: $0) }
+      }
+      set {
+        resultMap.updateValue(newValue?.resultMap, forKey: "Viewer")
+      }
+    }
+
+    public struct Viewer: GraphQLSelectionSet {
+      public static let possibleTypes = ["User"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("id", type: .nonNull(.scalar(Int.self))),
+      ]
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(id: Int) {
+        self.init(unsafeResultMap: ["__typename": "User", "id": id])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The id of the user
+      public var id: Int {
+        get {
+          return resultMap["id"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "id")
+        }
+      }
+    }
+  }
+}
+
 public final class MutateListEntryMutation: GraphQLMutation {
   public let operationDefinition =
     "mutation mutateListEntry($animeId: Int, $progress: Int, $status: MediaListStatus) {\n  SaveMediaListEntry(mediaId: $animeId, progress: $progress, status: $status) {\n    __typename\n    id\n    progress\n    status\n    media {\n      __typename\n      title {\n        __typename\n        romaji\n      }\n    }\n  }\n}"

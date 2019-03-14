@@ -820,6 +820,408 @@ public final class GetCurrentWatchingQuery: GraphQLQuery {
   }
 }
 
+public final class GraphgetAnimeByMalIdQuery: GraphQLQuery {
+  public let operationDefinition =
+    "query GraphgetAnimeByMalId($malId: Int!) {\n  Media(idMal: $malId) {\n    __typename\n    id\n    title {\n      __typename\n      romaji\n    }\n    episodes\n    mediaListEntry {\n      __typename\n      progress\n      status\n    }\n  }\n}"
+
+  public var malId: Int
+
+  public init(malId: Int) {
+    self.malId = malId
+  }
+
+  public var variables: GraphQLMap? {
+    return ["malId": malId]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Query"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("Media", arguments: ["idMal": GraphQLVariable("malId")], type: .object(Medium.selections)),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(media: Medium? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Query", "Media": media.flatMap { (value: Medium) -> ResultMap in value.resultMap }])
+    }
+
+    /// Media query
+    public var media: Medium? {
+      get {
+        return (resultMap["Media"] as? ResultMap).flatMap { Medium(unsafeResultMap: $0) }
+      }
+      set {
+        resultMap.updateValue(newValue?.resultMap, forKey: "Media")
+      }
+    }
+
+    public struct Medium: GraphQLSelectionSet {
+      public static let possibleTypes = ["Media"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("id", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("title", type: .object(Title.selections)),
+        GraphQLField("episodes", type: .scalar(Int.self)),
+        GraphQLField("mediaListEntry", type: .object(MediaListEntry.selections)),
+      ]
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(id: Int, title: Title? = nil, episodes: Int? = nil, mediaListEntry: MediaListEntry? = nil) {
+        self.init(unsafeResultMap: ["__typename": "Media", "id": id, "title": title.flatMap { (value: Title) -> ResultMap in value.resultMap }, "episodes": episodes, "mediaListEntry": mediaListEntry.flatMap { (value: MediaListEntry) -> ResultMap in value.resultMap }])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The id of the media
+      public var id: Int {
+        get {
+          return resultMap["id"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      /// The official titles of the media in various languages
+      public var title: Title? {
+        get {
+          return (resultMap["title"] as? ResultMap).flatMap { Title(unsafeResultMap: $0) }
+        }
+        set {
+          resultMap.updateValue(newValue?.resultMap, forKey: "title")
+        }
+      }
+
+      /// The amount of episodes the anime has when complete
+      public var episodes: Int? {
+        get {
+          return resultMap["episodes"] as? Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "episodes")
+        }
+      }
+
+      /// The authenticated user's media list entry for the media
+      public var mediaListEntry: MediaListEntry? {
+        get {
+          return (resultMap["mediaListEntry"] as? ResultMap).flatMap { MediaListEntry(unsafeResultMap: $0) }
+        }
+        set {
+          resultMap.updateValue(newValue?.resultMap, forKey: "mediaListEntry")
+        }
+      }
+
+      public struct Title: GraphQLSelectionSet {
+        public static let possibleTypes = ["MediaTitle"]
+
+        public static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("romaji", type: .scalar(String.self)),
+        ]
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(romaji: String? = nil) {
+          self.init(unsafeResultMap: ["__typename": "MediaTitle", "romaji": romaji])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The romanization of the native language title
+        public var romaji: String? {
+          get {
+            return resultMap["romaji"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "romaji")
+          }
+        }
+      }
+
+      public struct MediaListEntry: GraphQLSelectionSet {
+        public static let possibleTypes = ["MediaList"]
+
+        public static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("progress", type: .scalar(Int.self)),
+          GraphQLField("status", type: .scalar(MediaListStatus.self)),
+        ]
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(progress: Int? = nil, status: MediaListStatus? = nil) {
+          self.init(unsafeResultMap: ["__typename": "MediaList", "progress": progress, "status": status])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The amount of episodes/chapters consumed by the user
+        public var progress: Int? {
+          get {
+            return resultMap["progress"] as? Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "progress")
+          }
+        }
+
+        /// The watching/reading status
+        public var status: MediaListStatus? {
+          get {
+            return resultMap["status"] as? MediaListStatus
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "status")
+          }
+        }
+      }
+    }
+  }
+}
+
+public final class GraphGetAnimeByIdQuery: GraphQLQuery {
+  public let operationDefinition =
+    "query GraphGetAnimeById($Id: Int!) {\n  Media(id: $Id) {\n    __typename\n    id\n    title {\n      __typename\n      romaji\n    }\n    episodes\n    mediaListEntry {\n      __typename\n      progress\n      status\n    }\n  }\n}"
+
+  public var Id: Int
+
+  public init(Id: Int) {
+    self.Id = Id
+  }
+
+  public var variables: GraphQLMap? {
+    return ["Id": Id]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Query"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("Media", arguments: ["id": GraphQLVariable("Id")], type: .object(Medium.selections)),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(media: Medium? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Query", "Media": media.flatMap { (value: Medium) -> ResultMap in value.resultMap }])
+    }
+
+    /// Media query
+    public var media: Medium? {
+      get {
+        return (resultMap["Media"] as? ResultMap).flatMap { Medium(unsafeResultMap: $0) }
+      }
+      set {
+        resultMap.updateValue(newValue?.resultMap, forKey: "Media")
+      }
+    }
+
+    public struct Medium: GraphQLSelectionSet {
+      public static let possibleTypes = ["Media"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("id", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("title", type: .object(Title.selections)),
+        GraphQLField("episodes", type: .scalar(Int.self)),
+        GraphQLField("mediaListEntry", type: .object(MediaListEntry.selections)),
+      ]
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(id: Int, title: Title? = nil, episodes: Int? = nil, mediaListEntry: MediaListEntry? = nil) {
+        self.init(unsafeResultMap: ["__typename": "Media", "id": id, "title": title.flatMap { (value: Title) -> ResultMap in value.resultMap }, "episodes": episodes, "mediaListEntry": mediaListEntry.flatMap { (value: MediaListEntry) -> ResultMap in value.resultMap }])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The id of the media
+      public var id: Int {
+        get {
+          return resultMap["id"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      /// The official titles of the media in various languages
+      public var title: Title? {
+        get {
+          return (resultMap["title"] as? ResultMap).flatMap { Title(unsafeResultMap: $0) }
+        }
+        set {
+          resultMap.updateValue(newValue?.resultMap, forKey: "title")
+        }
+      }
+
+      /// The amount of episodes the anime has when complete
+      public var episodes: Int? {
+        get {
+          return resultMap["episodes"] as? Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "episodes")
+        }
+      }
+
+      /// The authenticated user's media list entry for the media
+      public var mediaListEntry: MediaListEntry? {
+        get {
+          return (resultMap["mediaListEntry"] as? ResultMap).flatMap { MediaListEntry(unsafeResultMap: $0) }
+        }
+        set {
+          resultMap.updateValue(newValue?.resultMap, forKey: "mediaListEntry")
+        }
+      }
+
+      public struct Title: GraphQLSelectionSet {
+        public static let possibleTypes = ["MediaTitle"]
+
+        public static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("romaji", type: .scalar(String.self)),
+        ]
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(romaji: String? = nil) {
+          self.init(unsafeResultMap: ["__typename": "MediaTitle", "romaji": romaji])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The romanization of the native language title
+        public var romaji: String? {
+          get {
+            return resultMap["romaji"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "romaji")
+          }
+        }
+      }
+
+      public struct MediaListEntry: GraphQLSelectionSet {
+        public static let possibleTypes = ["MediaList"]
+
+        public static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("progress", type: .scalar(Int.self)),
+          GraphQLField("status", type: .scalar(MediaListStatus.self)),
+        ]
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(progress: Int? = nil, status: MediaListStatus? = nil) {
+          self.init(unsafeResultMap: ["__typename": "MediaList", "progress": progress, "status": status])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The amount of episodes/chapters consumed by the user
+        public var progress: Int? {
+          get {
+            return resultMap["progress"] as? Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "progress")
+          }
+        }
+
+        /// The watching/reading status
+        public var status: MediaListStatus? {
+          get {
+            return resultMap["status"] as? MediaListStatus
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "status")
+          }
+        }
+      }
+    }
+  }
+}
+
 public final class GetAnimeByNameQuery: GraphQLQuery {
   public let operationDefinition =
     "query GetAnimeByName($animeTitle: String!) {\n  Media(search: $animeTitle) {\n    __typename\n    id\n    title {\n      __typename\n      romaji\n    }\n    episodes\n    mediaListEntry {\n      __typename\n      progress\n      status\n    }\n  }\n}"
@@ -1021,80 +1423,6 @@ public final class GetAnimeByNameQuery: GraphQLQuery {
   }
 }
 
-public final class GetOwnAnilistUserIdQuery: GraphQLQuery {
-  public let operationDefinition =
-    "query getOwnAnilistUserId {\n  Viewer {\n    __typename\n    id\n  }\n}"
-
-  public init() {
-  }
-
-  public struct Data: GraphQLSelectionSet {
-    public static let possibleTypes = ["Query"]
-
-    public static let selections: [GraphQLSelection] = [
-      GraphQLField("Viewer", type: .object(Viewer.selections)),
-    ]
-
-    public private(set) var resultMap: ResultMap
-
-    public init(unsafeResultMap: ResultMap) {
-      self.resultMap = unsafeResultMap
-    }
-
-    public init(viewer: Viewer? = nil) {
-      self.init(unsafeResultMap: ["__typename": "Query", "Viewer": viewer.flatMap { (value: Viewer) -> ResultMap in value.resultMap }])
-    }
-
-    /// Get the currently authenticated user
-    public var viewer: Viewer? {
-      get {
-        return (resultMap["Viewer"] as? ResultMap).flatMap { Viewer(unsafeResultMap: $0) }
-      }
-      set {
-        resultMap.updateValue(newValue?.resultMap, forKey: "Viewer")
-      }
-    }
-
-    public struct Viewer: GraphQLSelectionSet {
-      public static let possibleTypes = ["User"]
-
-      public static let selections: [GraphQLSelection] = [
-        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-        GraphQLField("id", type: .nonNull(.scalar(Int.self))),
-      ]
-
-      public private(set) var resultMap: ResultMap
-
-      public init(unsafeResultMap: ResultMap) {
-        self.resultMap = unsafeResultMap
-      }
-
-      public init(id: Int) {
-        self.init(unsafeResultMap: ["__typename": "User", "id": id])
-      }
-
-      public var __typename: String {
-        get {
-          return resultMap["__typename"]! as! String
-        }
-        set {
-          resultMap.updateValue(newValue, forKey: "__typename")
-        }
-      }
-
-      /// The id of the user
-      public var id: Int {
-        get {
-          return resultMap["id"]! as! Int
-        }
-        set {
-          resultMap.updateValue(newValue, forKey: "id")
-        }
-      }
-    }
-  }
-}
-
 public final class MutateListEntryMutation: GraphQLMutation {
   public let operationDefinition =
     "mutation mutateListEntry($animeId: Int, $progress: Int, $status: MediaListStatus) {\n  SaveMediaListEntry(mediaId: $animeId, progress: $progress, status: $status) {\n    __typename\n    id\n    progress\n    status\n    media {\n      __typename\n      title {\n        __typename\n        romaji\n      }\n    }\n  }\n}"
@@ -1282,6 +1610,80 @@ public final class MutateListEntryMutation: GraphQLMutation {
               resultMap.updateValue(newValue, forKey: "romaji")
             }
           }
+        }
+      }
+    }
+  }
+}
+
+public final class GetOwnAnilistUserIdQuery: GraphQLQuery {
+  public let operationDefinition =
+    "query getOwnAnilistUserId {\n  Viewer {\n    __typename\n    id\n  }\n}"
+
+  public init() {
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Query"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("Viewer", type: .object(Viewer.selections)),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(viewer: Viewer? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Query", "Viewer": viewer.flatMap { (value: Viewer) -> ResultMap in value.resultMap }])
+    }
+
+    /// Get the currently authenticated user
+    public var viewer: Viewer? {
+      get {
+        return (resultMap["Viewer"] as? ResultMap).flatMap { Viewer(unsafeResultMap: $0) }
+      }
+      set {
+        resultMap.updateValue(newValue?.resultMap, forKey: "Viewer")
+      }
+    }
+
+    public struct Viewer: GraphQLSelectionSet {
+      public static let possibleTypes = ["User"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("id", type: .nonNull(.scalar(Int.self))),
+      ]
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(id: Int) {
+        self.init(unsafeResultMap: ["__typename": "User", "id": id])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The id of the user
+      public var id: Int {
+        get {
+          return resultMap["id"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "id")
         }
       }
     }

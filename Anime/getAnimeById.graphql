@@ -1,0 +1,14 @@
+query GraphGetAnimeById($Id: Int!) {
+    Media(id: $Id) {
+        id
+        title {
+            romaji
+        }
+        episodes
+        mediaListEntry {
+            progress
+            status
+        }
+    }
+}
+

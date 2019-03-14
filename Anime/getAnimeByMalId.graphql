@@ -1,0 +1,14 @@
+query GraphgetAnimeByMalId($malId: Int!) {
+    Media(idMal: $malId) {
+        id
+        title {
+            romaji
+        }
+        episodes
+        mediaListEntry {
+            progress
+            status
+        }
+    }
+}
+
